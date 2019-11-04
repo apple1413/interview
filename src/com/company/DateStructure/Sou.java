@@ -25,7 +25,7 @@ public class Sou {
             node2.next = node3;
             node3.next = node4;
            // printNode(node1);
-            ReSort(node1);
+          //  ReSort(node1);
            printNode(node1);
         }
     }
