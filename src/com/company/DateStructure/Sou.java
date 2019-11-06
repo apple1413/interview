@@ -1,6 +1,8 @@
 package com.company.DateStructure;
 
 import javax.xml.soap.Text;
+import java.util.LinkedList;
+import java.util.Stack;
 
 class TextNode {
     public TextNode(int data) {
@@ -19,7 +21,7 @@ public class Sou {
 
             TextNode node1 = new TextNode(2);
             TextNode node2 = new TextNode(3);
-            TextNode node3 = new TextNode(3);
+            TextNode node3 = new TextNode(4);
             TextNode node4 = new TextNode(5);
             TextNode node5 = new TextNode(5);
             node1.next = node2;
@@ -31,13 +33,120 @@ public class Sou {
 
             //  deleteDupl(node1);
             //  printNode(node1);
-            ListReverse(node1);
-            printNode(node1);
+         //   ListReverse(node1);
+           // printNode(node1);
             //findK(node1, 3);
+           // System.out.println(findMidNode(node1).data);
+
+            pushStack(4);
+            pushStack(3);
+            pushStack(2);
+            pushStack(1);
+            System.out.println(popStack());
+            System.out.println(popStack());
+            System.out.println(popStack());
+            System.out.println(popStack());
+            int a[]={1,3,2,5,2};
+            SelectSor(a);
+
         }
     }
 
-    public static  void ListReverse(TextNode head){
+
+    /**
+     * 选择排序
+     * @param array
+     */
+    public static void SelectSor(int [] array){
+        int k=0;
+        for(int i=0;i<array.length;i++){
+            k=i;
+            for(int j=i+1;j<array.length;j++)
+            if(array[k]>array[j]){
+                swap(array,k,j);
+            }
+        }
+    }
+    public static void swap(int [] array,int a,int b){
+        int temp=array[a];
+        array[a]=array[b];
+        array[b]=temp;
+    }
+
+
+    /**
+     * 两个栈模拟队列
+     */
+   class Queue{
+       Stack<Integer> stack1= new Stack<Integer>();
+       Stack<Integer> stack2= new Stack<Integer>();
+
+       public void pushQuque(int a){
+           stack1.push(a);
+       }
+       public int pop (){
+           while(!stack1.isEmpty()){
+               stack2.push( stack1.pop());
+           }
+          return stack2.pop();
+       }
+
+   }
+
+
+       static LinkedList<Integer> list1= new  LinkedList<>();
+       static LinkedList<Integer> list2= new  LinkedList<>();
+
+        Stack<Integer> stack1= new Stack<Integer>();
+        Stack<Integer> stack2= new Stack<Integer>();
+
+        public static  void pushStack(int a){
+            list1.addLast(a);
+        }
+        public static int popStack (){
+            if(list2.size()==0){
+                while(list1.size()>1){
+                    list2.addLast( list1.pop());
+                }
+                return list1.pop();
+            }else{
+                while(list2.size()>1){
+                    list1.addLast( list2.pop());
+                }
+                return list2.pop();
+
+            }
+
+        }
+
+
+    /**
+     * 找到链表的中间节点
+     * @param head
+     * @return
+     */
+    public static TextNode findMidNode(TextNode head) {
+
+        TextNode preNode = head;
+        TextNode behNode = head;
+
+        while (behNode!=null&&behNode.next != null&&behNode.next.next!=null) {
+            preNode = preNode.next;
+            behNode = behNode.next.next;
+
+        }
+
+        return preNode;
+
+    }
+
+
+    /**
+     * 翻转单链表
+     *
+     * @param head
+     */
+    public static void ListReverse(TextNode head) {
 
      /*   TextNode curNode = head;
         head.next=null;
@@ -52,22 +161,23 @@ public class Sou {
         }*/
         TextNode curNode = head;
         TextNode preNode = null;
-        TextNode newNode=head;
-        while(curNode!=null){
-            TextNode pNext= curNode.next;
-            if(pNext==null){
-                newNode=curNode;
+        TextNode newNode = head;
+        while (curNode != null) {
+            TextNode pNext = curNode.next;
+            if (pNext == null) {
+                newNode = curNode;
             }
-            curNode.next=preNode;
-            preNode=curNode;
-            curNode=pNext;
+            curNode.next = preNode;
+            preNode = curNode;
+            curNode = pNext;
         }
-        head=newNode;
+        head = newNode;
 
     }
 
     /**
      * 倒数第K个节点
+     *
      * @param head
      * @param k
      * @return
