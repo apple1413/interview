@@ -42,17 +42,74 @@ public class Sou {
             pushStack(3);
             pushStack(2);
             pushStack(1);
-            System.out.println(popStack());
+           // int a=5>>1;
+
+          //  System.out.println(    Integer.toBinaryString(a));
+         /*   System.out.println(popStack());
             System.out.println(popStack());
             System.out.println(popStack());
             System.out.println(popStack());
             int a[]={1,3,2,5,2};
-            SelectSor(a);
-
+            SelectSor(a);*/
+            int a[]={1,3,2,5,2,-4};
+            findSendMax(a);
         }
     }
 
+    public static int  findSendMax(int a[]){
+        int max=a[0];
+        int sec=a[0];
+        for(int j=0;j<a.length;j++){
+            if(a[j]>max){
+                sec=max;
+                max=a[j];
+            }else if(a[j]>sec){
+                sec=a[j];
+            }
+        }
+        return sec;
+    }
 
+
+    /**
+     * 找出数组最大最小值
+     * @param a
+     */
+    public static void  findMaxandMin(int[] a){
+        int max=a[0];
+        int min=a[0];
+        for(int j=1;j<a.length;j++){
+            if(a[j]>min){
+                int temp=a[j];
+                a[j]=min;
+                min=temp;
+
+            }else if(a[j]<max){
+                int temp=a[j];
+                a[j]=max;
+                max=temp;
+
+            }
+          }
+
+
+
+    }
+    /**
+     * 判断数字有多少个1
+     * @param n
+     */
+    public static int  howCountOne(int n){
+
+        int count=0;
+        while(n>0){
+            if((n&1)==1){
+                count++;
+            }
+            n>>=1;
+        }
+        return count;
+    }
     /**
      * 选择排序
      * @param array
