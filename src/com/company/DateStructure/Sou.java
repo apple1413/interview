@@ -2,6 +2,8 @@ package com.company.DateStructure;
 
 import javax.xml.soap.Text;
 import java.lang.reflect.Array;
+import java.util.AbstractSequentialList;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Stack;
 
@@ -20,6 +22,10 @@ public class Sou {
     public static void main(String[] args) {
         {
 
+            ArrayList<Integer> list1 = new ArrayList<Integer>(10);
+            list1.add(1);
+            list1.add(2);
+            ArrayList<Integer> list2 = new ArrayList<Integer>(list1);
             TextNode node1 = new TextNode(2);
             TextNode node2 = new TextNode(3);
             TextNode node3 = new TextNode(4);
@@ -52,25 +58,130 @@ public class Sou {
             System.out.println(popStack());
             int a[]={1,3,2,5,2};
             SelectSor(a);*/
-            int a[] = {-1, -3, 4, 9, -4, -7, -1, -5};
+            int a[] = {4, 5, 6, 1,4, 7, 4,5,3,6};
             //findMaxChildArray(a);
             //QuickSort(a, 0, a.length - 1);
-            System.out.println(findK(a,0, a.length - 1,3));
+            //  System.out.println(findK(a, 0, a.length - 1, 3));
+            System.out.println(findTwoDistance(a, 4, 6));
         }
     }
 
     /**
+     * 排序好的数组中 获取绝对值最小的数
+     *
+     * @param a
+     * @return
+     */
+    public static int findAbsoluteMin(int[] a) {
+        int mid = 0;
+        int i = 0, j = a.length;
+        if (a[0] > 0) {
+            return a[0];
+        } else if (a[a.length - 1] < 0) {
+            return a[a.length - 1];
+        } else {
+            while (i <= j) {
+                mid = (j + i) / 2;
+                if (a[mid] > 0 && a[mid - 1] < 0) {
+                    return a[mid] > -a[mid - 1] ? a[mid - 1] : a[mid];
+                } else if (a[mid] < 0) {
+                    i = mid + 1;
+                } else {
+                    j = mid - 1;
+                }
+
+            }
+
+        }
+        return 0;
+
+    }
+
+    /**
+     * 求数组中两个元素的最小距离
+     * @param a
+     * @param i
+     * @param j
+     * @return
+     */
+    public static int findTwoDistance(int[] a, int i, int j) {
+        int k = 0;
+        int A =-1;
+        int B =-1;
+        int distance = Integer.MAX_VALUE;
+        for (; k < a.length; k++) {
+            if (a[k] == i) {
+                A = k;
+                if (B>=0&&Math.abs(A - B) < distance) {
+                    distance = Math.abs(A - B);
+                }
+            }
+            // distance= A-B;
+
+            if (a[k] == j) {
+                B = k;
+                //distance=B-A;
+                if (A>=0&&Math.abs(A - B) < distance) {
+                    distance = Math.abs(A - B);
+                }
+            }
+
+        }
+        return distance;
+    }
+
+
+    public static int max(int a, int b) {
+        return a > b ? a : b;
+    }
+
+    /**
+     * 递归求解数组的最大值
+     *
+     * @param a
+     * @param begin
+     * @return
+     */
+    public static int maxnum(int a[], int begin) {
+        int length = a.length - begin;
+        if (length == 1) {
+            return a[begin];
+        } else {
+            return max(a[begin], maxnum(a, begin + 1));
+        }
+    }
+
+    /**
+     * 找出1-n唯一重复的元素
+     *
+     * @param a
+     * @return
+     */
+    public static int findOnlyKey(int a[]) {
+        int i = 0;
+        int tem1 = 0, tem2 = 0;
+        for (; i < a.length; i++) {
+            tem1 += a[i];
+            tem2 += i;
+        }
+        return tem1 - tem2;
+
+
+    }
+
+    /**
      * 找出倒数第k个小的数
+     *
      * @param R
      * @param l
      * @param r
      * @param k
      * @return
      */
-    public static int findK(int R[], int l, int r,int k){
+    public static int findK(int R[], int l, int r, int k) {
         int i = l;
         int j = r;
-        int temp=0;
+        int temp = 0;
 
         temp = R[l];
         while (i < j) {
@@ -86,17 +197,16 @@ public class Sou {
                 --j;
             }
         }
-            R[i] =temp;
-            if(k==i+1){
-                return R[i];
-            }else if(i+1>k){
-               return findK(R, l, i-1,k);
-            }else{
-               return findK(R, i+1, r,k);
-            }
+        R[i] = temp;
+        if (k == i + 1) {
+            return R[i];
+        } else if (i + 1 > k) {
+            return findK(R, l, i - 1, k);
+        } else {
+            return findK(R, i + 1, r, k);
+        }
 
-    //    QuickSort(R, i + 1, r);
-
+        //    QuickSort(R, i + 1, r);
 
 
     }
@@ -148,10 +258,9 @@ public class Sou {
     }
 
 
-
-
     /**
      * 快速排序
+     *
      * @param R
      * @param l
      * @param r
@@ -159,27 +268,27 @@ public class Sou {
     public static void QuickSort(int R[], int l, int r) {
         int i = l;
         int j = r;
-        int temp=0;
-       // if (l < r) {
-            temp = R[l];
-            while (i != j) {
+        int temp = 0;
+        // if (l < r) {
+        temp = R[l];
+        while (i != j) {
 
-                while (i < j && R[j] > temp) --j;
-                if (i < j) {
-                    R[i] = R[j];
-                    ++i;
-                }
-                while (i < j && R[i] < temp) ++i;
-                if (i < j) {
-                    R[j] = R[i];
-                    --j;
-                }
+            while (i < j && R[j] > temp) --j;
+            if (i < j) {
+                R[i] = R[j];
+                ++i;
             }
-            R[i] =temp;
+            while (i < j && R[i] < temp) ++i;
+            if (i < j) {
+                R[j] = R[i];
+                --j;
+            }
+        }
+        R[i] = temp;
 
-           QuickSort(R, l, i - 1);
-              QuickSort(R, i + 1, r);
-      //  }
+        QuickSort(R, l, i - 1);
+        QuickSort(R, i + 1, r);
+        //  }
 
     }
 
