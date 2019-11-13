@@ -1,11 +1,11 @@
 package com.company.DateStructure;
 
 import javax.xml.soap.Text;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.lang.reflect.Array;
-import java.util.AbstractSequentialList;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Stack;
+import java.util.*;
 
 class TextNode {
     public TextNode(int data) {
@@ -17,12 +17,52 @@ class TextNode {
 }
 
 public class Sou {
+    public static final String path = "E:/input.txt";
+    public String name = null;
 
+    public void readFile() {
+        File file = new File(path);
+        BufferedReader reader = null;
+        HashMap<String, Double> map = new HashMap<String, Double>();
+        try {
+            reader = new BufferedReader(new FileReader(file));
+            String tempStr = null;
+            while ((tempStr = reader.readLine()) != null) {
+                String[] str = tempStr.split(" ");
+                name = str[0];
+                double temp = 1;
+                if (map.containsKey(str[1])) {
+                    temp = (Double) map.get(str[1]);
+                    map.put(str[1], ++temp);
+                } else {
+                    map.put(str[1], temp);
+
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        //算概率
+        double SumShang = 0;
+        for (Map.Entry<String, Double> entry : map.entrySet()) {
+            double avg = entry.getValue() / map.size();
+            map.put(entry.getKey(), avg);
+            // log((double)N)/log((double)2)
+            SumShang += -avg * log2(avg);
+        }
+        System.out.println(name + "下wifimac熵值 :" + SumShang);
+
+    }
+
+    public double log2(double N) {
+        return Math.log(N) / Math.log(2);//Math.log的底为e
+    }
 
     public static void main(String[] args) {
         {
 
-            ArrayList<Integer> list1 = new ArrayList<Integer>(10);
+           /* ArrayList<Integer> list1 = new ArrayList<Integer>(10);
             list1.add(1);
             list1.add(2);
             ArrayList<Integer> list2 = new ArrayList<Integer>(list1);
@@ -52,18 +92,112 @@ public class Sou {
             // int a=5>>1;
 
             //  System.out.println(    Integer.toBinaryString(a));
-         /*   System.out.println(popStack());
+         *//*   System.out.println(popStack());
             System.out.println(popStack());
             System.out.println(popStack());
             System.out.println(popStack());
             int a[]={1,3,2,5,2};
-            SelectSor(a);*/
-            int a[] = {4, 5, 6, 1,4, 7, 4,5,3,6};
+            SelectSor(a);*//*
+            int a[] = {4, 5, 6, 1, 4, 7, 4, 5, 3, 6};
             //findMaxChildArray(a);
             //QuickSort(a, 0, a.length - 1);
             //  System.out.println(findK(a, 0, a.length - 1, 3));
-            System.out.println(findTwoDistance(a, 4, 6));
+            System.out.println(findTwoDistance(a, 4, 6));*/
+            int[] a = {1, 2, 3, 0, 5};
+
+            String s1 = "aaabbcc";
+            String s2 = "aa abbc cc";
+            compare(s1, s2);
+            System.out.println(caclNumberString(s2));
         }
+    }
+
+    /**
+     * 判断字符串中有多少个单词
+     * @param str
+     * @return
+     */
+    public static  int  caclNumberString(String str){
+        int word=1;
+        int count=0;
+        for(int i=0;i<str.length();i++){
+            if(str.charAt(i)==' '){
+                word=1;
+            }else if(word==1){
+                count++;
+                word=0;
+            }
+        }
+          return  count;
+
+    }
+
+    /**
+     * 删除字符串中重复的字符
+     * @param str
+     * @return
+     */
+    public static String removeDuplicate(String str) {
+
+        char[] a = str.toCharArray();
+
+        for (int i = 0; i < a.length; i++) {
+            for (int j = i + 1; j < a.length; j++) {
+                if (a[i] == a[j]) {
+                    a[j] = '\0';
+                }
+            }
+        }
+        int l = 0;
+        for (int i = 0; i < a.length; i++) {
+            if (a[i] != '\0') {
+                a[l++] = a[i];
+            }
+        }
+        return new String(a, 0, l);
+
+    }
+
+    /**
+     * 判断两个字符串是否由相同的字符组成
+     *
+     * @param s1
+     * @param s2
+     */
+    public static void compare(String s1, String s2) {
+        byte[] b1 = s1.getBytes();
+        byte[] b2 = s2.getBytes();
+        Arrays.sort(b1);
+        Arrays.sort(b2);
+        s1 = new String(b1);
+        s2 = new String(b2);
+        if (s1.equals(s2)) {
+            System.out.println("equal");
+        } else {
+            System.out.println("false");
+
+        }
+
+
+    }
+
+    /**
+     * 判断一个数组中的数值是否连续相邻
+     */
+    public static Boolean judageArray(int a[]) {
+        int max = a[0];
+        int min = a[0];
+
+        for (int i = 0; i < a.length; i++) {
+            if (a[i] > max) {
+                max = a[i];
+
+            }
+            if (min > a[i])
+                min = a[i];
+        }
+
+        return max - min <= 5 ? true : false;
     }
 
     /**
@@ -99,6 +233,7 @@ public class Sou {
 
     /**
      * 求数组中两个元素的最小距离
+     *
      * @param a
      * @param i
      * @param j
@@ -106,13 +241,13 @@ public class Sou {
      */
     public static int findTwoDistance(int[] a, int i, int j) {
         int k = 0;
-        int A =-1;
-        int B =-1;
+        int A = -1;
+        int B = -1;
         int distance = Integer.MAX_VALUE;
         for (; k < a.length; k++) {
             if (a[k] == i) {
                 A = k;
-                if (B>=0&&Math.abs(A - B) < distance) {
+                if (B >= 0 && Math.abs(A - B) < distance) {
                     distance = Math.abs(A - B);
                 }
             }
@@ -121,7 +256,7 @@ public class Sou {
             if (a[k] == j) {
                 B = k;
                 //distance=B-A;
-                if (A>=0&&Math.abs(A - B) < distance) {
+                if (A >= 0 && Math.abs(A - B) < distance) {
                     distance = Math.abs(A - B);
                 }
             }
